@@ -11,7 +11,8 @@ export default class Weather extends React.Component {
       wind_speed: 0,
       wind_direction: 0,
       description: "",
-      icon: ""
+      icon: "",
+      isLoaded: false
     }
   }
 
@@ -35,6 +36,7 @@ export default class Weather extends React.Component {
             wind_direction: result.wind.deg,
             description: result.weather[0].description,
             icon: result.weather[0].icon,
+            isLoaded: true
           })
         },
         (error) => {
@@ -44,18 +46,24 @@ export default class Weather extends React.Component {
   }
 
   render() {
-    const { temp, wind_speed, wind_direction, description, icon } = this.state;
+    const { temp, wind_speed, wind_direction, description, icon, isLoaded } = this.state;
     const icon_url = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
     console.log(icon_url);
-    return (
-      <div>
+    
+    if (isLoaded) {
+      return (
+        <div>
         <h3>Weather at your location:</h3>
         <p>{temp} C&#176; </p>
         <p>{wind_speed} m/s {wind_direction} degrees</p>
         <p>{description}</p>
         <img src={icon_url}></img>
       </div>
-    )
-
+      )
+    }
+    else {
+      return <p>Getting the weather at your location...</p>
+    }
+ 
   }
 }
